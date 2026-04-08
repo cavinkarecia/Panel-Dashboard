@@ -61,7 +61,7 @@ const runReport = async (providedUsers = null) => {
   }
 
   // 3. Dispatch Emails (Text Summary Only)
-  let dashboardUrl = "http://localhost:5000"; // Fallback
+  let dashboardUrl = "https://panel-creation-dashboard.onrender.com"; // Fallback
   
   const URL_FILE = path.join(__dirname, "last_dashboard_url.txt");
   if (fs.existsSync(URL_FILE)) {

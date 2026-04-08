@@ -30,7 +30,7 @@ const loadUsers = () => {
 const saveUsers = (data) => fs.writeFileSync(USERS_FILE, JSON.stringify(data, null, 2));
 
 let users = loadUsers();
-let lastDashboardUrl = "http://localhost:5000";
+let lastDashboardUrl = "https://panel-creation-dashboard.onrender.com";
 
 /* API Endpoints */
 
