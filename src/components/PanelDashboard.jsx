@@ -1040,7 +1040,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
 
                             const row1Titles = ["Total Entries", "Accepted Entries", "Days Running", "Hair Care Users"];
                             const row2Titles = ["Duplicate Entries", "Geo Mismatch", "Team Conversion", "Team Quality"];
-                            const row3Titles = ["Team Productivity", "Team Integrity"];
+                            const row3Titles = ["Team Productivity", "Team Integrity", "Team Performance Index"];
 
                             const teamConv = dashboardData.totalEntries > 0 ? (dashboardData.acceptedEntries / dashboardData.totalEntries) * 100 : 0;
                             const teamValid = dashboardData.acceptedEntries - (dashboardData.teamTotalShort + dashboardData.teamTotalLong);
@@ -1048,6 +1048,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                             const teamProdRaw = dashboardData.acceptedEntries / (dashboardData.daysCount || 1);
                             const teamProd = (teamProdRaw / (dashboardData.teamSize * 10)) * 100;
                             const teamInteg = dashboardData.acceptedEntries > 0 ? (1 - (dashboardData.teamTotalIntegrityErrors / dashboardData.acceptedEntries)) * 100 : 0;
+                            const teamPerfIndex = (teamConv + teamQual + Math.min(100, teamProd) + teamInteg) / 4;
 
                             return (
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
@@ -1115,6 +1116,10 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                     <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', background: 'rgba(244, 63, 94, 0.05)', border: '1px solid rgba(244, 63, 94, 0.1)' }} title={`Team Data Integrity\nTotal Errors: ${dashboardData.teamTotalIntegrityErrors}`}>
                                         <h3 style={{ color: '#f43f5e', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Team Integrity</h3>
                                         <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: '900', color: '#f43f5e', margin: '0.5rem 0' }}>{Math.max(0, Math.round(teamInteg))}%</div>
+                                    </div>
+                                    <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', background: 'linear-gradient(145deg, rgba(251, 191, 36, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%)', border: '1px solid rgba(251, 191, 36, 0.3)', boxShadow: '0 0 30px rgba(251, 191, 36, 0.1)' }} title="Team's Overall Performance Weightage (Avg of all Core Metrics)">
+                                        <h3 style={{ color: '#fbbf24', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: '900' }}>Team's Performance Index</h3>
+                                        <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: '900', color: '#fbbf24', margin: '0.5rem 0', textShadow: '0 0 20px rgba(251, 191, 36, 0.3)' }}>{Math.round(teamPerfIndex)}%</div>
                                     </div>
 
                                     {/* Drilldown for Row 3 */}
