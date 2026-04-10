@@ -292,17 +292,33 @@ const PanelDashboard = ({ onDataUpdate }) => {
         let geoMismatchTotal = 0;
         const geoFencing = { "Within City Limits": 0, "Outside City Limits": 0, "Unknown": 0 };
 
-        // Core Hardcoded Columns based on User Mapping
-        const dateKey = 'B';
-        const cityKey = 'K';
-        const ageKey = 'O';
-        const genderKey = 'T';
-        const haircareKey = 'AA';
-        const productsKey = 'AB';
-        const consentKey1 = 'I';
-        const consentKey2 = 'J';
-        const interviewerKey = 'EU';
-        const durationKey = 'D';
+        // --- DYNAMIC HEADER DISCOVERY (Intelligent Column Mapping) ---
+        let dateKey = 'B';
+        let cityKey = 'K';
+        let ageKey = 'O';
+        let genderKey = 'T';
+        let haircareKey = 'AA';
+        let productsKey = 'AB';
+        let consentKey1 = 'I';
+        let consentKey2 = 'J';
+        let interviewerKey = 'EU';
+        let durationKey = 'D';
+
+        // Scan headers for matches
+        Object.keys(localHeadersMap).forEach(key => {
+            const h = localHeadersMap[key].toLowerCase();
+            if (h.includes("interviewer") || h.includes("agent") || h.includes("enumerat")) interviewerKey = key;
+            if (h.includes("city") || (h.includes("town") && !h.includes("village"))) cityKey = key;
+            if (h.includes("age") && !h.includes("group") && !h.includes("bracket")) ageKey = key;
+            if (h.includes("gender") || h.includes("sex")) genderKey = key;
+            if (h.includes("duration") || h.includes("time taken")) durationKey = key;
+            if (h.includes("consent") || h.includes("agree")) {
+                if (consentKey1 === 'I') consentKey1 = key;
+                else if (consentKey2 === 'J') consentKey2 = key;
+            }
+        });
+
+        console.log("Detected Column Mapping:", { interviewerKey, cityKey, ageKey, genderKey, durationKey });
 
         const interviewerStats = {};
 
