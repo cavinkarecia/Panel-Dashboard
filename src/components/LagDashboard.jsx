@@ -9,83 +9,88 @@ const LagDashboard = ({ study }) => {
         return `${diff} days`;
     };
 
-    const getLagStatus = (stageId) => {
-        const stage = study.stages.find(s => s.id === stageId);
-        if (stage.status === 'in-progress' || stage.status === 'not-started') {
-            const start = new Date(study.initiatedDate);
-            const now = new Date();
-            const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-            // Assuming 10 days threshold for the more detailed steps
-            if (diff > 10) return { text: `Lag: ${diff - 10} days over SOP`, type: 'error' };
-        }
-        return { text: 'On Track', type: 'success' };
+    const getDelayStats = () => {
+        const delayedStages = study.stages.filter(s => s.delayDetails);
+        const responsibilityMap = {};
+        const nextSteps = [];
+
+        delayedStages.forEach(s => {
+            const resp = s.delayDetails.responsible;
+            responsibilityMap[resp] = (responsibilityMap[resp] || 0) + 1;
+            if (s.delayDetails.nextStep) {
+                nextSteps.push({ stage: s.name, step: s.delayDetails.nextStep });
+            }
+        });
+
+        return {
+            count: delayedStages.length,
+            responsibilities: responsibilityMap,
+            nextSteps
+        };
     };
 
+    const delayStats = getDelayStats();
     const activeStage = study.stages.find(s => s.status === 'in-progress');
 
     return (
         <div className="glass-card fade-in" style={{ background: 'rgba(36, 40, 59, 0.4)', border: '1px solid rgba(251, 191, 36, 0.1)' }}>
-            <h3 style={{ marginBottom: '1.5rem', color: 'var(--primary)', fontWeight: '900', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: '1rem' }}>Process Metrics & Premium Lag Detection</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
-                <div style={{
-                    padding: '1.8rem',
-                    textAlign: 'center',
-                    background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%)',
-                    borderRadius: '20px',
-                    border: '1px solid rgba(251, 191, 36, 0.15)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center'
-                }}>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px' }}>Total Cycle Time</p>
-                    <h2 style={{ color: 'var(--primary)', fontSize: '2.8rem', fontWeight: '900', margin: 0, textShadow: '0 0 20px rgba(251, 191, 36, 0.3)' }}>{calculateTotalDuration()}</h2>
+            <h3 style={{ marginBottom: '1.5rem', color: 'var(--primary)', fontWeight: '900', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: '1rem' }}>Study Lead/Lag Performance Dashboard</h3>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', background: 'rgba(15, 23, 42, 0.6)' }}>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '10px' }}>Current Phase</p>
+                    <h2 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: '900', margin: 0 }}>{activeStage?.phase || 'Completed'}</h2>
                 </div>
 
-                <div style={{
-                    padding: '1.8rem',
-                    textAlign: 'center',
-                    background: getLagStatus(study.currentStage).type === 'error' ? 'rgba(248, 113, 113, 0.05)' : 'rgba(52, 211, 153, 0.05)',
-                    borderRadius: '20px',
-                    border: `1px solid ${getLagStatus(study.currentStage).type === 'error' ? 'rgba(248, 113, 113, 0.2)' : 'rgba(52, 211, 153, 0.2)'}`,
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center'
-                }}>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px' }}>System Health</p>
-                    <h4 style={{ color: getLagStatus(study.currentStage).type === 'error' ? 'var(--error)' : 'var(--success)', fontSize: '1.4rem', fontWeight: '900', margin: 0 }}>
-                        {getLagStatus(study.currentStage).text}
-                    </h4>
+                <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', background: 'rgba(15, 23, 42, 0.6)' }}>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '10px' }}>Total Delay Incidents</p>
+                    <h2 style={{ color: delayStats.count > 0 ? '#f43f5e' : 'var(--success)', fontSize: '2.5rem', fontWeight: '900', margin: 0 }}>{delayStats.count}</h2>
                 </div>
 
-                <div style={{
-                    padding: '1.8rem',
-                    textAlign: 'center',
-                    background: 'rgba(30, 41, 59, 0.6)',
-                    borderRadius: '20px',
-                    border: '1px solid rgba(192, 38, 211, 0.2)',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center'
-                }}>
-                    <p style={{ color: 'var(--accent)', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '10px' }}>Active Stage Bottleneck</p>
-                    {activeStage ? (
-                        <>
-                            <h4 style={{ color: '#ffffff', fontSize: '1.1rem', fontWeight: '900', margin: '0 0 5px 0' }}>{activeStage.name}</h4>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem', fontWeight: '600', margin: 0 }}>
-                                RESPONSIBLE: <span style={{ color: 'var(--primary)' }}>{activeStage.responsible}</span>
-                            </p>
-                        </>
+                <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', background: 'rgba(15, 23, 42, 0.6)' }}>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '10px' }}>Est. Total Duration</p>
+                    <h2 style={{ color: 'var(--primary)', fontSize: '2.5rem', fontWeight: '900', margin: 0 }}>{calculateTotalDuration()}</h2>
+                </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                {/* Responsibility Breakdown */}
+                <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(30, 41, 59, 0.3)' }}>
+                    <h4 style={{ color: 'var(--primary)', fontSize: '0.85rem', fontWeight: '900', marginBottom: '1rem', textTransform: 'uppercase' }}>Delay Responsibility</h4>
+                    {Object.keys(delayStats.responsibilities).length > 0 ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {Object.entries(delayStats.responsibilities).map(([resp, count]) => (
+                                <div key={resp} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
+                                    <span style={{ fontSize: '0.85rem', color: '#f1f5f9' }}>{resp}</span>
+                                    <span style={{ background: '#f43f5e', color: '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold' }}>{count} Delayed</span>
+                                </div>
+                            ))}
+                        </div>
                     ) : (
-                        <h4 style={{ color: 'var(--success)', fontSize: '1.2rem', fontWeight: '900', margin: 0 }}>All Stages Ready</h4>
+                        <p style={{ color: 'var(--success)', fontSize: '0.85rem', fontStyle: 'italic' }}>No delay accountability recorded yet.</p>
+                    )}
+                </div>
+
+                {/* Next Steps to Avoid Lag */}
+                <div className="glass-card" style={{ padding: '1.5rem', background: 'rgba(30, 41, 59, 0.3)' }}>
+                    <h4 style={{ color: 'var(--accent)', fontSize: '0.85rem', fontWeight: '900', marginBottom: '1rem', textTransform: 'uppercase' }}>Recovery & Avoidance Steps</h4>
+                    {delayStats.nextSteps.length > 0 ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {delayStats.nextSteps.map((item, idx) => (
+                                <div key={idx} style={{ padding: '8px', background: 'rgba(192, 38, 211, 0.05)', borderRadius: '8px', borderLeft: '3px solid var(--accent)' }}>
+                                    <p style={{ fontSize: '0.7rem', color: 'var(--accent)', fontWeight: 'bold', margin: '0 0 4px 0' }}>{item.stage}</p>
+                                    <p style={{ fontSize: '0.8rem', color: '#f1f5f9', margin: 0 }}>Next: {item.step}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', fontStyle: 'italic' }}>No recovery steps pending.</p>
                     )}
                 </div>
             </div>
 
-            <div style={{ marginTop: '2.5rem' }}>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '1rem', fontWeight: '700', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Workflow Timeline (SOP Execution):</p>
+            <div style={{ marginTop: '2rem' }}>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '1rem', fontWeight: '700', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Workflow Integrity Progress:</p>
                 <div style={{ display: 'flex', gap: '8px', height: '14px', background: 'rgba(15, 23, 42, 0.6)', borderRadius: '30px', overflow: 'hidden', padding: '3px', border: '1px solid rgba(255,255,255,0.05)' }}>
                     {study.stages.map(s => (
                         <div

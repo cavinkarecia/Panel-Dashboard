@@ -184,7 +184,24 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.drilldown-action:hover {
-    background: rgba(251, 191, 36, 0.08) !important;
-    border-color: rgba(251, 191, 36, 0.3) !important;
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-completed { background-color: var(--success); }
+.status-in-progress { background-color: var(--warning); animation: pulse 2s infinite; }
+.status-not-started { background-color: rgba(255, 255, 255, 0.2); }
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
 }

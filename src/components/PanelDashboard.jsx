@@ -335,10 +335,12 @@ const PanelDashboard = ({ onDataUpdate }) => {
 
             if (lowerName === 'mtidul' || lowerName === 'mumbai' || lowerName === 'mridul') {
                 rawName = 'Mridul';
-            } else if (lowerName === 'rajesh' || lowerName === 'rajesh pandey' || lowerName === 'rajesh kumar pandey') {
+            } else if (lowerName === 'rajesh' || lowerName === 'rajesh pandey' || lowerName === 'rajesh kumar pandey' || lowerName === 'rajeah') {
                 rawName = 'Rajesh Pandey';
             } else if (lowerName === 'harish' || lowerName === 'harish a') {
                 rawName = 'Harish';
+            } else if (lowerName === 'afi') {
+                rawName = 'Adi';
             }
 
             const name = rawName;
@@ -1146,7 +1148,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                     </div>
 
                     {/* Module B: Respondent Insights */}
-                    <div style={{ padding: '2.5rem', background: 'rgba(15, 23, 42, 0.3)', borderRadius: '2.5rem', marginBottom: '4rem', boxShadow: '0 20px 50px -20px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ padding: 'clamp(1rem, 5vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.3)', borderRadius: '2.5rem', marginBottom: '4rem', boxShadow: '0 20px 50px -20px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.05)' }}>
                         <h3 style={{ color: 'var(--primary)', fontSize: '1.2rem', fontWeight: '800', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <span style={{ width: '40px', height: '1.5px', background: 'var(--primary)', opacity: 0.5 }}></span>
                             RESPONDENT DEMOGRAPHICS & USAGE
@@ -1156,7 +1158,9 @@ const PanelDashboard = ({ onDataUpdate }) => {
                             display: 'grid',
                             gridTemplateColumns: 'repeat(3, 1fr)', // FORCED 3-Column Layout
                             gridAutoRows: '1fr',
-                            gap: '2rem'
+                            gap: '2.5rem',
+                            maxWidth: '1200px',
+                            margin: '0 auto'
                         }}>
                             <div className="glass-card" style={{ padding: '2rem', border: '1px solid rgba(255,255,255,0.05)' }}>
                                 {renderTable(dashboardData.cityStats, "City Breakdown", dashboardData.acceptedEntries, (row, val) => {
@@ -1349,7 +1353,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                     <div style={{ padding: 'clamp(1rem, 5vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.5)', borderRadius: '2.5rem', border: '1.5px solid rgba(255,255,255,0.08)' }}>
                         <h2 style={{ color: 'var(--primary)', fontSize: 'clamp(1rem, 4vw, 1.4rem)', fontWeight: '900', textAlign: 'center', marginBottom: 'clamp(1.5rem, 5vw, 3rem)', letterSpacing: '0.15em' }}>FIELD TEAM PERFORMANCE RADAR</h2>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '3.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', marginBottom: '3.5rem', maxWidth: '900px', margin: '0 auto 3.5rem auto' }}>
                             <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', border: '1px solid rgba(16, 185, 129, 0.3)', background: 'rgba(16, 185, 129, 0.05)' }}>
                                 <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Team's Quality</div>
                                 <div style={{ fontSize: '0.8rem', color: '#10b981', marginBottom: '0.25rem' }}>Target: 50%</div>
@@ -1360,13 +1364,6 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                 <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Team's Productivity</div>
                                 <div style={{ fontSize: '0.8rem', color: '#38bdf8', marginBottom: '0.25rem' }}>Target: 50 rec/day</div>
                                 <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: '900', color: dashboardData.teamAvgProd >= 50 ? '#10b981' : '#f87171' }}>{dashboardData.teamAvgProd}</div>
-                            </div>
-
-                            <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', border: '1px solid rgba(217, 119, 6, 0.3)', background: 'rgba(217, 119, 6, 0.05)' }}>
-                                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Monthly Goal Progress</div>
-                                <div style={{ fontSize: '0.8rem', color: 'var(--primary)', marginBottom: '0.25rem' }}>Target: 1500 Records</div>
-                                <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', fontWeight: '900', color: 'var(--primary)' }}>{dashboardData.panelReadyCount}</div>
-                                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>{((dashboardData.panelReadyCount / 1500) * 100).toFixed(1)}% of Master Goal</div>
                             </div>
                         </div>
 
@@ -1482,14 +1479,14 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
                                         <thead>
                                             <tr style={{ borderBottom: '2px solid rgba(255,255,255,0.05)', textAlign: 'left' }}>
-                                                <th style={{ padding: '1rem', color: 'var(--text-muted)' }}>Interviewer</th>
-                                                <th style={{ padding: '1rem', color: 'var(--text-muted)', textAlign: 'center' }}>Total</th>
-                                                <th style={{ padding: '1rem', color: 'var(--primary)', textAlign: 'center' }}>Accepted</th>
-                                                <th style={{ padding: '1rem', color: '#38bdf8', textAlign: 'center' }} title={`Logic: (Accepted / Total Attempts) * 30%`}>Conversion (30%)</th>
-                                                <th style={{ padding: '1rem', color: '#10b981', textAlign: 'center' }} title={`Logic: (Valid / Accepted) * 30%\nValid = No outliers (<15s or >15m)`}>Execution Quality (30%)</th>
-                                                <th style={{ padding: '1rem', color: '#fbbf24', textAlign: 'center' }} title={`Logic: (Accepted per Day / Target 10) * 20%`}>Productivity (20%)</th>
-                                                <th style={{ padding: '1rem', color: '#f43f5e', textAlign: 'center' }} title={`Logic: (100 - Error Rate) * 20%\nErrors = Missing City, Age, Gender, or Duration`}>Data Integrity (20%)</th>
-                                                <th style={{ padding: '1rem', color: '#fff', textAlign: 'right' }}>Performance Index</th>
+                                                <th style={{ padding: '1.2rem', color: 'var(--text-muted)', textAlign: 'left', fontWeight: '900' }}>Interviewer</th>
+                                                <th style={{ padding: '1.2rem', color: 'var(--text-muted)', textAlign: 'center', fontWeight: '900' }}>Total</th>
+                                                <th style={{ padding: '1.2rem', color: 'var(--primary)', textAlign: 'center', fontWeight: '900' }}>Accepted</th>
+                                                <th style={{ padding: '1.2rem', color: '#38bdf8', textAlign: 'center', fontWeight: '900' }} title={`Logic: (Accepted / Total Attempts) * 30%`}>Conversion (30%)</th>
+                                                <th style={{ padding: '1.2rem', color: '#10b981', textAlign: 'center', fontWeight: '900' }} title={`Logic: (Valid / Accepted) * 30%\nValid = No outliers (<15s or >15m)`}>Quality (30%)</th>
+                                                <th style={{ padding: '1.2rem', color: '#fbbf24', textAlign: 'center', fontWeight: '900' }} title={`Logic: (Accepted per Day / Target 10) * 20%`}>Productivity (20%)</th>
+                                                <th style={{ padding: '1.2rem', color: '#f43f5e', textAlign: 'center', fontWeight: '900' }} title={`Logic: (100 - Error Rate) * 20%\nErrors = Missing City, Age, Gender, or Duration`}>Integrity (20%)</th>
+                                                <th style={{ padding: '1.2rem', color: '#fff', textAlign: 'right', fontWeight: '900' }}>Performance Index</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1624,8 +1621,10 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                                                                                 const row = getRowObj(rowArr);
                                                                                                 if (!isAcceptedRow(row)) return false;
                                                                                                 let rName = (row['EU'] || "").toString().trim();
-                                                                                                if (rName.toLowerCase() === 'rajesh' || rName.toLowerCase() === 'rajesh pandey') rName = 'Rajesh Pandey';
-                                                                                                if (rName.toLowerCase() === 'harish') rName = 'Harish';
+                                                                                                const lName = rName.toLowerCase();
+                                                                                                if (lName === 'rajeah' || lName === 'rajesh' || lName === 'rajesh pandey') rName = 'Rajesh Pandey';
+                                                                                                if (lName === 'harish') rName = 'Harish';
+                                                                                                if (lName === 'afi') rName = 'Adi';
                                                                                                 return rName === name;
                                                                                             })
                                                                                             .slice(0, 500)
