@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+*.log
+backend/users.json
+backend/last_dashboard_url.txt
+backend/last_dashboard_state.json
+.DS_Store

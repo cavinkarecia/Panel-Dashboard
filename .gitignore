@@ -1,8 +1,7 @@
-node_modules
-dist
-.env
+node_modules/
+dist/
 *.log
-backend/users.json
-backend/last_dashboard_url.txt
-backend/last_dashboard_state.json
+.env
 .DS_Store
+app/node_modules/
+app/dist/
