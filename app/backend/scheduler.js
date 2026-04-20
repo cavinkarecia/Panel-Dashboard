@@ -53,7 +53,7 @@ const runReport = async (providedUsers = null) => {
                   acceptedRecords: dbData.acceptedEntries || 0,
                   qualityScore: dbData.teamAvgQual || 0,
                   productivityScore: dbData.teamAvgProd || 0,
-                  integrityScore: integ
+                  integrityScore: dbData.integrityScore || 0
               };
           }
       } catch (e) {
@@ -84,10 +84,14 @@ const runReport = async (providedUsers = null) => {
 
     // 3b. Slack Dispatch
     try {
-      await sendSlackDM(user.email, metrics, dashboardUrl);
-      console.log("Slack DM report dispatched to:", user.email);
+      const slackResult = await sendSlackDM(user.email, metrics, dashboardUrl);
+      if (slackResult && slackResult.success) {
+        console.log(`[Slack Success] DM report delivered to: ${user.email}`);
+      } else {
+        console.error(`[Slack Failure] DM failed for ${user.email}: ${slackResult?.error || 'Unknown Error'}`);
+      }
     } catch (err) {
-      console.error("Failed executing slack delivery to:", user.email, err);
+      console.error("Critical error during slack delivery loop:", err);
     }
   }
 };

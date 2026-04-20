@@ -4,6 +4,7 @@ import RecipientModal from './components/RecipientModal';
 
 function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [currentDashboardData, setCurrentDashboardData] = useState(null);
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
@@ -58,7 +59,7 @@ function App() {
 
       {/* Main Content Area */}
       <main style={{ padding: 'clamp(1rem, 5vw, 3rem)' }}>
-        <PanelDashboard />
+        <PanelDashboard onDataUpdate={(data) => setCurrentDashboardData(data)} />
       </main>
 
       <footer style={{ padding: '2rem', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', opacity: 0.5 }}>
@@ -68,6 +69,7 @@ function App() {
       <RecipientModal 
         isOpen={isShareModalOpen} 
         onClose={() => setIsShareModalOpen(false)} 
+        currentData={currentDashboardData}
       />
     </div>
   );

@@ -555,6 +555,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
         const teamAvgProd = accepted / (days || 1);
         const teamAvgQual = teamSize > 0 ? statsArray.reduce((acc, s) => acc + (s.total > 0 ? (s.accepted / s.total) * 100 : 0), 0) / teamSize : 0;
         const panelReady = accepted - incomplete;
+        const integrityScore = accepted > 0 ? Math.max(0, Math.round(((accepted - teamTotalIntegrityErrors) / accepted) * 100)) : 100;
 
         const finalizedData = {
             totalEntries: total,
@@ -566,6 +567,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
             panelReadinessScore: total > 0 ? ((panelReady / total) * 100).toFixed(1) : 0,
             teamAvgQual: teamAvgQual.toFixed(1),
             teamAvgProd: teamAvgProd.toFixed(1),
+            integrityScore: integrityScore, // Add this line
             daysCount: days,
             teamSize: teamSize,
             teamTotalShort: teamTotalShort,
@@ -576,8 +578,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
             duplicatePhoneEntries: Object.values(phoneFreq).reduce((acc, freq) => (freq > 1 ? acc + freq : acc), 0),
             geoMismatchEntries: geoMismatchTotal,
             geoFencingStats: geoFencing,
-            phoneFreq: phoneFreq, // Pass freq map for drilldown filtering
-
+            phoneFreq: phoneFreq, 
             haircareUsers: haircare,
             cityStats: cities,
             ageStats: ages,
@@ -586,8 +587,8 @@ const PanelDashboard = ({ onDataUpdate }) => {
             platformStats: platforms,
             tallies: tallies,
             interviewerStats: interviewerStats,
-            rawRows: rows, // Store filtered valid rows for drilldown (raw array)
-            objRows: rows.map(r => getRowObj(r)) // Pre-cache as objects to eliminate hover lag
+            rawRows: rows, 
+            objRows: rows.map(r => getRowObj(r)) 
         };
 
         setDashboardData(finalizedData);

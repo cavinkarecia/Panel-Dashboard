@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const RecipientModal = ({ isOpen, onClose }) => {
+const RecipientModal = ({ isOpen, onClose, currentData }) => {
     const [users, setUsers] = useState([]);
     const [newEmail, setNewEmail] = useState('');
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
@@ -54,6 +54,16 @@ const RecipientModal = ({ isOpen, onClose }) => {
     const handleTriggerReport = async () => {
         setStatus('loading');
         try {
+            // 1. Sync the real-time data to ensure metrics are correct
+            if (currentData) {
+                await fetch('/api/save-dashboard-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dashboardData: currentData })
+                });
+            }
+
+            // 2. Now trigger the email/slack generation
             const res = await fetch('/api/trigger', { method: 'POST' });
             if (res.ok) {
                 setStatus('success');
