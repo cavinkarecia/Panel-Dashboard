@@ -37,6 +37,23 @@ const RecipientModal = ({ isOpen, onClose, currentData }) => {
         }
     };
 
+    const handleToggleUser = async (email) => {
+        const updated = users.map(u => u.email === email ? { ...u, active: !u.active } : u);
+        setUsers(updated);
+        
+        // Persist the selection to the backend
+        const selectedEmails = updated.filter(u => u.active).map(u => u.email);
+        try {
+            await fetch('/api/select-users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ selectedEmails })
+            });
+        } catch (e) {
+            console.error("Toggle failed:", e);
+        }
+    };
+
     const handleDeleteUser = async (email) => {
         try {
             const res = await fetch('/api/delete-user', {
@@ -102,9 +119,12 @@ const RecipientModal = ({ isOpen, onClose, currentData }) => {
                 position: 'relative'
             }} onClick={e => e.stopPropagation()}>
                 
-                <h2 style={{ color: 'var(--primary)', fontSize: '1.4rem', fontWeight: '900', marginBottom: '1.5rem', letterSpacing: '0.05em' }}>
+                <h2 style={{ color: 'var(--primary)', fontSize: '1.4rem', fontWeight: '900', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
                     REPORT RECIPIENTS
                 </h2>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem', marginBottom: '1.5rem', fontWeight: 'bold' }}>
+                    CHOOSE WHO RECEIVES THE EMAIL & SLACK DM
+                </p>
 
                 <div style={{ marginBottom: '2rem' }}>
                     <div style={{ display: 'flex', gap: '10px', marginBottom: '1rem' }}>
@@ -145,9 +165,36 @@ const RecipientModal = ({ isOpen, onClose, currentData }) => {
                                 borderBottom: i === users.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.05)',
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'center'
+                                alignItems: 'center',
+                                background: u.active ? 'rgba(251, 191, 36, 0.03)' : 'transparent',
+                                transition: 'all 0.2s'
                             }}>
-                                <span style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>{u.email}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }} onClick={() => handleToggleUser(u.email)}>
+                                    <div style={{
+                                        width: '18px',
+                                        height: '18px',
+                                        borderRadius: '4px',
+                                        border: `2px solid ${u.active ? 'var(--primary)' : 'rgba(255,255,255,0.2)'}`,
+                                        background: u.active ? 'var(--primary)' : 'transparent',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        transition: 'all 0.2s'
+                                    }}>
+                                        {u.active && (
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="4">
+                                                <polyline points="20 6 9 17 4 12" />
+                                            </svg>
+                                        )}
+                                    </div>
+                                    <span style={{ 
+                                        fontSize: '0.85rem', 
+                                        color: u.active ? '#fff' : '#64748b',
+                                        fontWeight: u.active ? 'bold' : 'normal'
+                                    }}>
+                                        {u.email}
+                                    </span>
+                                </div>
                                 <button 
                                     onClick={() => handleDeleteUser(u.email)}
                                     style={{
@@ -155,11 +202,12 @@ const RecipientModal = ({ isOpen, onClose, currentData }) => {
                                         border: 'none',
                                         color: '#f43f5e',
                                         cursor: 'pointer',
-                                        fontSize: '0.7rem',
-                                        fontWeight: 'bold'
+                                        fontSize: '0.6rem',
+                                        fontWeight: 'bold',
+                                        opacity: 0.5
                                     }}
                                 >
-                                    REMOVE
+                                    DELETE
                                 </button>
                             </div>
                         )) : (
