@@ -37,7 +37,7 @@ async function sendEmail(to, metrics = {}, dashboardUrl = "https://your-dashboar
                     <td style="padding: 15px; border-bottom: 1px solid #f1f5f9; text-align: right; color: #10b981; font-weight: 900; font-size: 1.1rem;">${metrics.acceptedRecords || 0}</td>
                 </tr>
                 <tr>
-                    <td style="padding: 15px; border-bottom: 1px solid #f1f5f9; color: #475569; font-weight: bold;">Quality score</td>
+                    <td style="padding: 15px; border-bottom: 1px solid #f1f5f9; color: #475569; font-weight: bold;">Performance Index avg</td>
                     <td style="padding: 15px; border-bottom: 1px solid #f1f5f9; text-align: right; color: #10b981; font-weight: 900; font-size: 1.1rem;">${metrics.qualityScore || 0}%</td>
                 </tr>
                 <tr>
