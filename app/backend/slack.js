@@ -11,21 +11,31 @@ const client = new WebClient(process.env.SLACK_BOT_TOKEN);
  */
 async function sendSlackDM(email, metrics = {}, dashboardUrl = "") {
     if (!process.env.SLACK_BOT_TOKEN) {
-        console.warn("SLACK_BOT_TOKEN not found. Skipping Slack dispatch.");
+        console.warn("[Slack Debug] SLACK_BOT_TOKEN not found in environment. Skipping dispatch.");
         return;
     }
 
+    const normalizedEmail = email.toLowerCase().trim();
+    console.log(`[Slack Debug] Attempting DM for: ${normalizedEmail}`);
+
     try {
         // 1. Look up User ID by Email
-        const userLookup = await client.users.lookupByEmail({ email });
+        const userLookup = await client.users.lookupByEmail({ email: normalizedEmail });
+        
         if (!userLookup.ok) {
-            console.error(`Slack Lookup Failed for ${email}: ${userLookup.error}`);
-            return;
+            console.error(`[Slack Debug] Lookup Failed for ${normalizedEmail}:`, userLookup.error);
+            if (userLookup.error === 'users_not_found') {
+                console.warn(`[Slack Debug] Advice: Ensure '${normalizedEmail}' is the primary email on their Slack profile.`);
+            } else if (userLookup.error === 'missing_scope') {
+                console.warn(`[Slack Debug] Advice: Ensure your Slack App has the 'users:read.email' scope enabled.`);
+            }
+            return { success: false, error: userLookup.error };
         }
 
         const userId = userLookup.user.id;
+        console.log(`[Slack Debug] Found User ID: ${userId} for ${normalizedEmail}`);
 
-        // 2. Construct Block Kit Message
+        // 2. Construct Block Kit Message (Keep existing blocks logic...)
         const blocks = [
             {
                 "type": "header",
@@ -108,16 +118,23 @@ async function sendSlackDM(email, metrics = {}, dashboardUrl = "") {
         ];
 
         // 3. Post Message
-        await client.chat.postMessage({
+        const result = await client.chat.postMessage({
             channel: userId,
             blocks: blocks,
             text: "CavinKare Panel Creation Performance Report"
         });
 
-        return { success: true, email };
+        if (result.ok) {
+            console.log(`[Slack Debug] DM successfully delivered to ${normalizedEmail}`);
+            return { success: true, email: normalizedEmail };
+        } else {
+            console.error(`[Slack Debug] PostMessage failed for ${normalizedEmail}:`, result.error);
+            return { success: false, error: result.error };
+        }
+
     } catch (err) {
-        console.error(`Slack Delivery Failure for ${email}:`, err.message);
-        return { success: false, email, error: err.message };
+        console.error(`[Slack Debug] Critical Error for ${normalizedEmail}:`, err.message);
+        return { success: false, email: normalizedEmail, error: err.message };
     }
 }
 
