@@ -202,6 +202,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
     const [activeCardDrilldown, setActiveCardDrilldown] = useState(null); // { title, rows, color }
     const [expandedInterviewer, setExpandedInterviewer] = useState(null);
     const [saveStatus, setSaveStatus] = useState('idle'); // idle, saving, success
+    const [isLoadingInitial, setIsLoadingInitial] = useState(true);
 
     // Synchronize Dashboard Link and Data on Mount
     useEffect(() => {
@@ -224,7 +225,12 @@ const PanelDashboard = ({ onDataUpdate }) => {
                     setHeadersMap(data.headersMap || {});
                     if (onDataUpdate) onDataUpdate(data.dashboardData);
                 }
-            }).catch(e => console.error("Data-Load Failure:", e));
+            })
+            .catch(e => console.error("Data-Load Failure:", e))
+            .finally(() => {
+                // Ensure loading screen stays for at least 1s for "Premium" feel and robust state
+                setTimeout(() => setIsLoadingInitial(false), 800);
+            });
     }, []);
 
     const getRowObj = (rowArr) => {
@@ -982,6 +988,35 @@ const PanelDashboard = ({ onDataUpdate }) => {
         );
     };
 
+    if (isLoadingInitial) {
+        return (
+            <div style={{ 
+                height: '60vh', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                gap: '2rem'
+            }}>
+                <div style={{
+                    width: '60px',
+                    height: '60px',
+                    border: '3px solid rgba(251, 191, 36, 0.1)',
+                    borderTop: '3px solid var(--primary)',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                }} />
+                <div style={{ textAlign: 'center' }}>
+                    <h2 style={{ color: 'var(--primary)', fontSize: '1.2rem', fontWeight: '900', letterSpacing: '0.2em', marginBottom: '0.5rem' }}>SYNCING LIVE DATA</h2>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Connecting to Performance Engine...</p>
+                </div>
+                <style>{`
+                    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                `}</style>
+            </div>
+        );
+    }
+
     return (
         <div className="glass-card" style={{ padding: '2rem', animation: 'fadeIn 0.5s ease-out' }}>
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -1035,7 +1070,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                         padding: '2rem', 
                                         marginTop: '1rem',
                                         marginBottom: '2rem', 
-                                        border: `2px solid ${activeCardDrilldown.color}44`, 
+                                                        border: `2px solid ${activeCardDrilldown.color}44`, 
                                         background: `${activeCardDrilldown.color}08`,
                                         animation: 'fadeIn 0.3s ease-out',
                                         zIndex: 10
