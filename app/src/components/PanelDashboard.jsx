@@ -222,6 +222,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                 if (data && data.dashboardData) {
                     setDashboardData(data.dashboardData);
                     setHeadersMap(data.headersMap || {});
+                    if (onDataUpdate) onDataUpdate(data.dashboardData);
                 }
             }).catch(e => console.error("Data-Load Failure:", e));
     }, []);
