@@ -1,5 +1,6 @@
 const cron = require("node-cron");
 const sendEmail = require("./email");
+const { sendSlackDM } = require("./slack");
 const fs = require("fs");
 const path = require("path");
 
@@ -24,7 +25,7 @@ const runReport = async (providedUsers = null) => {
   }
 
   if (activeUsers.length === 0) {
-      console.log("No active users. Skipping email task.");
+      console.log("No active users. Skipping dispatch task.");
       return;
   }
 
@@ -60,7 +61,7 @@ const runReport = async (providedUsers = null) => {
       }
   }
 
-  // 3. Dispatch Emails (Text Summary Only)
+  // 3. Dispatch Reports (Email & Slack)
   let dashboardUrl = "https://panel-creation-dashboard.onrender.com"; // Fallback
   
   const URL_FILE = path.join(__dirname, "last_dashboard_url.txt");
@@ -73,11 +74,20 @@ const runReport = async (providedUsers = null) => {
   }
   
   for (const user of activeUsers) {
+    // 3a. Outlook Dispatch
     try {
       await sendEmail(user.email, metrics, dashboardUrl);
-      console.log("Simplified text report dispatched to:", user.email);
+      console.log("Outlook report dispatched to:", user.email);
     } catch (err) {
-      console.error("Failed executing mailer to:", user.email, err);
+      console.error("Failed executing outlook mailer to:", user.email, err);
+    }
+
+    // 3b. Slack Dispatch
+    try {
+      await sendSlackDM(user.email, metrics, dashboardUrl);
+      console.log("Slack DM report dispatched to:", user.email);
+    } catch (err) {
+      console.error("Failed executing slack delivery to:", user.email, err);
     }
   }
 };
