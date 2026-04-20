@@ -3,7 +3,7 @@ services:
     name: panel-creation-dashboard
     env: node
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npm run build && cd backend && npm install
     startCommand: npm run start
     envVars:
       - key: NODE_VERSION
