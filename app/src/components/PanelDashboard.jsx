@@ -346,7 +346,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                 rawName = 'Rajesh Pandey';
             } else if (lowerName === 'harish' || lowerName === 'harish a') {
                 rawName = 'Harish';
-            } else if (lowerName === 'afi') {
+            } else if (lowerName === 'afi' || lowerName === 'asi' || lowerName === 'adi') {
                 rawName = 'Adi';
             }
 
@@ -1674,7 +1674,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                                                                                 const lName = rName.toLowerCase();
                                                                                                 if (lName === 'rajeah' || lName === 'rajesh' || lName === 'rajesh pandey') rName = 'Rajesh Pandey';
                                                                                                 if (lName === 'harish') rName = 'Harish';
-                                                                                                if (lName === 'afi') rName = 'Adi';
+                                                                                                if (lName === 'afi' || lName === 'asi' || lName === 'adi') rName = 'Adi';
                                                                                                 return rName === name;
                                                                                             })
                                                                                             .slice(0, 500)
