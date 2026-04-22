@@ -1509,6 +1509,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                     </ResponsiveContainer>
                                 </div>
                             </div>
+                        </div>
 
                             {/* Interviewer Performance Section */}
                             <div id="performance-scorecard-section" className="glass-card" style={{ padding: 'clamp(1rem, 5vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.3)' }}>
