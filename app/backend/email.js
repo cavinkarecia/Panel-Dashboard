@@ -52,7 +52,7 @@ async function sendEmail(to, metrics = {}, dashboardUrl = "https://your-dashboar
 
             <p style={{ textAlign: 'center', margin: '40px 0', display: 'flex', justifyContent: 'center', gap: '20px' }}>
                 <a href="${dashboardUrl}" style="background: #fbbf24; color: #000; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 900; border: 1px solid #d97706; display: inline-block;">ACCESS LIVE DASHBOARD</a>
-                <a href="${dashboardUrl}?autoPrint=true" style="background: #38bdf8; color: #fff; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 900; border: 1px solid #0284c7; display: inline-block;">DOWNLOAD PDF REPORT</a>
+                <a href="${dashboardUrl}?autoDownload=true" style="background: #38bdf8; color: #fff; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 900; border: 1px solid #0284c7; display: inline-block;">DOWNLOAD PDF REPORT</a>
             </p>
 
             <p style="margin-top: 40px; border-top: 1px solid #f1f5f9; padding-top: 25px;">

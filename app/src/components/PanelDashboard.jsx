@@ -204,6 +204,21 @@ const PanelDashboard = ({ onDataUpdate }) => {
     const [saveStatus, setSaveStatus] = useState('idle'); // idle, saving, success
     const [isLoadingInitial, setIsLoadingInitial] = useState(true);
 
+    const handleDownloadPDF = () => {
+        const element = document.getElementById('dashboard-main-content');
+        if (!element || !window.html2pdf) return;
+        
+        const opt = {
+            margin: [10, 10],
+            filename: `Panel_Performance_Report_${new Date().toISOString().split('T')[0]}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#0f172a' },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        window.html2pdf().from(element).set(opt).save();
+    };
+
     // Synchronize Dashboard Link and Data on Mount
     useEffect(() => {
         // 1. Sync the current URL to the backend for the "Daily Update" email link
@@ -233,13 +248,13 @@ const PanelDashboard = ({ onDataUpdate }) => {
             });
     }, []);
     
-    // Auto-Print Trigger for PDF Reports
+    // Auto-Download Trigger for PDF Reports
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        if (params.get('autoPrint') === 'true' && dashboardData) {
+        if ((params.get('autoPrint') === 'true' || params.get('autoDownload') === 'true') && dashboardData) {
             const timer = setTimeout(() => {
-                window.print();
-            }, 2500); // Wait for animations
+                handleDownloadPDF();
+            }, 3000); // Wait for animations and charts
             return () => clearTimeout(timer);
         }
     }, [dashboardData]);
@@ -1038,21 +1053,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                 <p style={{ color: 'var(--text-muted)' }}>Upload your GoSurvey export (CSV/Excel) to instantly calculate respondent statistics.</p>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '3rem' }}>
-                <button
-                    onClick={() => window.print()}
-                    className="premium-button no-print"
-                    style={{
-                        background: 'rgba(56, 189, 248, 0.1)',
-                        color: '#38bdf8',
-                        border: '1px solid rgba(56, 189, 248, 0.4)',
-                        padding: '1rem 2rem',
-                        fontSize: '1rem'
-                    }}
-                >
-                    📄 EXPORT PDF REPORT
-                </button>
-
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3rem' }}>
                 <div style={{ position: 'relative', overflow: 'hidden', display: 'inline-block' }}>
                     <button
                         className="premium-button no-print"
@@ -1081,7 +1082,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
             </div>
 
             {dashboardData && (
-                <>
+                <div id="dashboard-main-content">
                     {/* Module A: Project Pulse */}
                     <div id="project-pulse-section" style={{ padding: 'clamp(1rem, 5vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', borderRadius: '2.5rem', marginBottom: '3rem', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)' }}>
                         <h3 style={{ color: 'var(--primary)', fontSize: 'clamp(1rem, 4vw, 1.2rem)', fontWeight: '800', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>

@@ -111,7 +111,7 @@ async function sendSlackDM(email, metrics = {}, dashboardUrl = "") {
                             "text": "Download PDF Report",
                             "emoji": true
                         },
-                        "url": `${dashboardUrl}?autoPrint=true` || "https://panel-creation-dashboard.onrender.com?autoPrint=true",
+                        "url": `${dashboardUrl}?autoDownload=true` || "https://panel-creation-dashboard.onrender.com?autoDownload=true",
                         "action_id": "download_pdf"
                     }
                 ]
