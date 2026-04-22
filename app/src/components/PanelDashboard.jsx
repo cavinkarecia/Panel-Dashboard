@@ -1196,9 +1196,9 @@ const PanelDashboard = ({ onDataUpdate }) => {
 
                         <div style={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(3, 1fr)', // FORCED 3-Column Layout
-                            gridAutoRows: '1fr',
-                            gap: '2.5rem',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', 
+                            gridAutoRows: 'auto',
+                            gap: 'clamp(1rem, 3vw, 2.5rem)',
                             maxWidth: '1200px',
                             margin: '0 auto'
                         }}>
