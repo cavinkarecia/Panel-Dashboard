@@ -711,6 +711,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                 </table>
             </div>
         </div>
+    </div>
     );
 
     const renderTable = (dataObj, title, total, drilldownConfig = null, customLayerOpts = null) => {
