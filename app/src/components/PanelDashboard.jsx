@@ -1740,7 +1740,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                             </div>
                         </div>
                     </div>
-                </>
+                </div>
             )}
 
             {/* Modal deleted to embrace full inline-accordion architecture */}
