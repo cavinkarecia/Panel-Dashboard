@@ -103,6 +103,16 @@ async function sendSlackDM(email, metrics = {}, dashboardUrl = "") {
                         "url": dashboardUrl || "https://panel-creation-dashboard.onrender.com",
                         "style": "primary",
                         "action_id": "view_dashboard"
+                    },
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Download PDF Report",
+                            "emoji": true
+                        },
+                        "url": `${dashboardUrl}?autoPrint=true` || "https://panel-creation-dashboard.onrender.com?autoPrint=true",
+                        "action_id": "download_pdf"
                     }
                 ]
             },

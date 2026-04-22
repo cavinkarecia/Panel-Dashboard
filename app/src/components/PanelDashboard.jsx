@@ -232,6 +232,17 @@ const PanelDashboard = ({ onDataUpdate }) => {
                 setTimeout(() => setIsLoadingInitial(false), 800);
             });
     }, []);
+    
+    // Auto-Print Trigger for PDF Reports
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('autoPrint') === 'true' && dashboardData) {
+            const timer = setTimeout(() => {
+                window.print();
+            }, 2500); // Wait for animations
+            return () => clearTimeout(timer);
+        }
+    }, [dashboardData]);
 
     const getRowObj = (rowArr) => {
         const obj = {};
@@ -1027,10 +1038,24 @@ const PanelDashboard = ({ onDataUpdate }) => {
                 <p style={{ color: 'var(--text-muted)' }}>Upload your GoSurvey export (CSV/Excel) to instantly calculate respondent statistics.</p>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '3rem' }}>
+                <button
+                    onClick={() => window.print()}
+                    className="premium-button no-print"
+                    style={{
+                        background: 'rgba(56, 189, 248, 0.1)',
+                        color: '#38bdf8',
+                        border: '1px solid rgba(56, 189, 248, 0.4)',
+                        padding: '1rem 2rem',
+                        fontSize: '1rem'
+                    }}
+                >
+                    📄 EXPORT PDF REPORT
+                </button>
+
                 <div style={{ position: 'relative', overflow: 'hidden', display: 'inline-block' }}>
                     <button
-                        className="premium-button"
+                        className="premium-button no-print"
                         style={{
                             background: 'rgba(251, 191, 36, 0.1)',
                             color: 'var(--primary)',
@@ -1049,7 +1074,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                     />
                 </div>
                 {fileName && (
-                    <div style={{ alignSelf: 'center', marginLeft: '1rem', color: 'var(--text-color)', fontSize: '0.9rem' }}>
+                    <div style={{ alignSelf: 'center', marginLeft: '1rem', color: 'var(--text-color)', fontSize: '0.9rem' }} className="no-print">
                         Loaded: <span style={{ color: 'var(--secondary)', fontWeight: 'bold' }}>{fileName}</span>
                     </div>
                 )}

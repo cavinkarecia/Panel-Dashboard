@@ -203,6 +203,54 @@ body::before {
 }
 
 .status-completed { background-color: var(--success); }
+
+/* Print Mode for PDF Reports */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  
+  .glass-card {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+  
+  .premium-button, 
+  .no-print, 
+  .file-upload-header,
+  .inline-explorer-wrapper,
+  .input-group,
+  button {
+    display: none !important;
+  }
+  
+  h1, h2, h3, h4 {
+    color: #000 !important;
+    text-shadow: none !important;
+  }
+  
+  .status-dot {
+    border: 1px solid #000;
+    print-color-adjust: exact;
+  }
+
+  .table-container {
+    overflow: visible !important;
+  }
+
+  table {
+    color: #000 !important;
+  }
+
+  th {
+    color: #444 !important;
+    background: #f4f4f4 !important;
+  }
+}
 .status-in-progress { background-color: var(--warning); animation: pulse 2s infinite; }
 .status-not-started { background-color: rgba(255, 255, 255, 0.2); }
 
