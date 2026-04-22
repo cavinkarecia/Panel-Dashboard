@@ -1188,7 +1188,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
                     </div>
 
                     {/* Module B: Respondent Insights */}
-                    <div style={{ padding: 'clamp(1rem, 5vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.3)', borderRadius: '2.5rem', marginBottom: '4rem', boxShadow: '0 20px 50px -20px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ padding: 'clamp(0.75rem, 4vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.3)', borderRadius: 'clamp(1rem, 5vw, 2.5rem)', marginBottom: '4rem', boxShadow: '0 20px 50px -20px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.05)' }}>
                         <h3 style={{ color: 'var(--primary)', fontSize: '1.2rem', fontWeight: '800', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <span style={{ width: '40px', height: '1.5px', background: 'var(--primary)', opacity: 0.5 }}></span>
                             RESPONDENT DEMOGRAPHICS & USAGE
@@ -1409,7 +1409,7 @@ const PanelDashboard = ({ onDataUpdate }) => {
 
                         <div style={{ display: 'grid', gap: '3rem' }}>
                             {/* Team Standing Scatter Chart */}
-                            <div className="glass-card" style={{ padding: '2.5rem', background: 'rgba(15, 23, 42, 0.3)' }}>
+                            <div className="glass-card" style={{ padding: 'clamp(1rem, 4vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.3)', borderRadius: 'clamp(1rem, 5vw, 2rem)' }}>
                                 <h3 style={{ color: 'var(--primary)', marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1rem', fontWeight: '800', letterSpacing: '0.05em' }}>
                                     <span>TEAM VELOCITY MAP</span>
                                     <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.7rem', opacity: 0.8 }}>
@@ -1422,7 +1422,8 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                     </div>
                                 </h3>
 
-                                <div style={{ height: 400, width: '100%', position: 'relative' }}>
+                                <div className="ios-scroll">
+                                    <div style={{ height: 400, width: '100%', minWidth: '600px', position: 'relative' }}>
                                     {/* Quadrant Labels */}
                                     <div style={{ position: 'absolute', top: 5, right: 60, fontSize: '0.7rem', color: '#10b981', opacity: 0.6, fontWeight: 'bold' }}>STARS (HIGH SPEED & QUALITY)</div>
                                     <div style={{ position: 'absolute', bottom: 60, left: 60, fontSize: '0.7rem', color: '#f87171', opacity: 0.6, fontWeight: 'bold' }}>NEEDS QC SUPPORT</div>
@@ -1525,8 +1526,8 @@ const PanelDashboard = ({ onDataUpdate }) => {
                                     <span className="mobile-text-center mobile-full-width">INDIVIDUAL PERFORMANCE SCORECARD</span>
                                     <span className="mobile-hide" style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>* Click 'Accepted' counts to view specific records</span>
                                 </h3>
-                                <div style={{ overflowX: 'auto' }}>
-                                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                                <div className="table-container">
+                                    <table style={{ width: '100%', minWidth: '800px', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
                                         <thead>
                                             <tr style={{ borderBottom: '2px solid rgba(255,255,255,0.05)', textAlign: 'left' }}>
                                                 <th style={{ padding: '1.2rem', color: 'var(--text-muted)', textAlign: 'left', fontWeight: '900' }}>Interviewer</th>
