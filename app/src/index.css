@@ -84,21 +84,19 @@ body::before {
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  padding: 2.5rem;
+  padding: clamp(1.25rem, 5vw, 2.5rem);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (max-width: 768px) {
   .glass-card {
-    padding: 1.25rem;
     border-radius: 16px;
   }
-}
-
-.glass-card:hover {
-  border-color: rgba(251, 191, 36, 0.3);
-  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
-  transform: translateY(-5px);
+  
+  .mobile-hide { display: none !important; }
+  .mobile-stack { flex-direction: column !important; align-items: flex-start !important; gap: 1.5rem !important; }
+  .mobile-text-center { text-align: center !important; }
+  .mobile-full-width { width: 100% !important; }
 }
 
 .premium-button {

@@ -9,8 +9,8 @@ function App() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
       {/* Premium Header */}
-      <header style={{ 
-          padding: '2rem 4rem', 
+      <header className="mobile-stack" style={{ 
+          padding: '2rem clamp(1.5rem, 5vw, 4rem)', 
           background: 'rgba(15, 23, 42, 0.4)', 
           backdropFilter: 'blur(20px)',
           borderBottom: '1px solid rgba(251, 191, 36, 0.1)',
@@ -18,20 +18,20 @@ function App() {
           justifyContent: 'space-between',
           alignItems: 'center'
       }}>
-        <div>
+        <div className="mobile-text-center">
             <h1 style={{ 
                 color: 'var(--primary)', 
-                fontSize: '1.8rem', 
+                fontSize: 'clamp(1.4rem, 4vw, 1.8rem)', 
                 fontWeight: '900', 
                 letterSpacing: '0.05em',
                 margin: 0
             }}>PANEL CREATION DASHBOARD</h1>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Analytics & Integrity Platform</p>
+            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Analytics & Integrity Platform</p>
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2.5rem' }}>
+        <div className="mobile-stack mobile-full-width" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
             <button 
-                className="premium-button"
+                className="premium-button mobile-full-width"
                 onClick={() => setIsShareModalOpen(true)}
                 style={{ 
                     padding: '0.8rem 1.5rem', 
@@ -47,7 +47,7 @@ function App() {
                 SHARE REPORT
             </button>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div className="mobile-hide" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <div style={{ textAlign: 'right' }}>
                     <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', margin: 0 }}>SYSTEM STATUS</p>
                     <p style={{ fontSize: '0.75rem', color: 'var(--success)', fontWeight: 'bold', margin: 0 }}>LIVE / OPERATIONAL</p>

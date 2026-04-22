@@ -684,6 +684,8 @@ const PanelDashboard = ({ onDataUpdate }) => {
                 <span style={{ color: '#10b981', fontWeight: 'bold', fontSize: '0.8rem' }}>INLINE EXPLORER (Showing {Math.min(dataRows.length, 500)} records)</span>
                 <button onClick={() => setClickedData(null)} style={{ background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(16,185,129,0.5)', color: '#10b981', cursor: 'pointer', padding: '0.3rem 0.6rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', transition: 'all 0.2s', zIndex: 20 }}>CLOSE ⨉</button>
             </div>
+            {/* Scrollable Container */}
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
             {/* Scrollable area exclusively for the wide table */}
             <div style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '350px', padding: '1rem' }}>
                 <table style={{ width: 'max-content', borderCollapse: 'separate', borderSpacing: '0', fontSize: '0.75rem' }}>
@@ -1055,8 +1057,8 @@ const PanelDashboard = ({ onDataUpdate }) => {
             {dashboardData && (
                 <>
                     {/* Module A: Project Pulse */}
-                    <div id="project-pulse-section" style={{ padding: '2.5rem', background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', borderRadius: '2.5rem', marginBottom: '3rem', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)' }}>
-                        <h3 style={{ color: 'var(--primary)', fontSize: '1.2rem', fontWeight: '800', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div id="project-pulse-section" style={{ padding: 'clamp(1rem, 5vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', borderRadius: '2.5rem', marginBottom: '3rem', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)' }}>
+                        <h3 style={{ color: 'var(--primary)', fontSize: 'clamp(1rem, 4vw, 1.2rem)', fontWeight: '800', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <span style={{ width: '40px', height: '1.5px', background: 'var(--primary)', opacity: 0.5 }}></span>
                             PROJECT PULSE & CORE METRICS
                         </h3>
@@ -1106,23 +1108,23 @@ const PanelDashboard = ({ onDataUpdate }) => {
                             const teamPerfIndex = (teamConv + teamQual + Math.min(100, teamProd) + teamInteg) / 4;
 
                             return (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '1.5rem' }}>
                                     {/* Row 1 cards */}
                                     <div className="glass-card drilldown-action" style={{ padding: '1.5rem', textAlign: 'center', background: 'linear-gradient(145deg, rgba(241, 245, 249, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%)', border: activeCardDrilldown?.title === "Total Entries" ? '1px solid #fff' : '1px solid rgba(255,255,255,0.05)', cursor: 'pointer' }} onClick={() => toggleCardDrilldown("Total Entries", "var(--text)", (r) => true)}>
-                                        <h3 style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Entries</h3>
-                                        <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: '900', color: '#fff', margin: '0.5rem 0' }}>{dashboardData.totalEntries}</div>
+                                        <h3 style={{ color: 'var(--text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Entries</h3>
+                                        <div style={{ fontSize: 'clamp(1.8rem, 8vw, 2.5rem)', fontWeight: '900', color: '#fff', margin: '0.5rem 0' }}>{dashboardData.totalEntries}</div>
                                     </div>
                                     <div className="glass-card drilldown-action" style={{ padding: '1.5rem', textAlign: 'center', background: 'linear-gradient(145deg, rgba(16, 185, 129, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%)', border: activeCardDrilldown?.title === "Accepted Entries" ? '1px solid #10b981' : '1px solid rgba(16, 185, 129, 0.2)', cursor: 'pointer' }} onClick={() => toggleCardDrilldown("Accepted Entries", "#10b981", (r) => isAcceptedRow(r))}>
-                                        <h3 style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Accepted Entries</h3>
-                                        <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: '900', color: '#10b981', margin: '0.5rem 0' }}>{dashboardData.acceptedEntries}</div>
+                                        <h3 style={{ color: 'var(--text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Accepted Entries</h3>
+                                        <div style={{ fontSize: 'clamp(1.8rem, 8vw, 2.5rem)', fontWeight: '900', color: '#10b981', margin: '0.5rem 0' }}>{dashboardData.acceptedEntries}</div>
                                     </div>
                                     <div className="glass-card" style={{ padding: '1.5rem', textAlign: 'center', background: 'linear-gradient(145deg, rgba(56, 189, 248, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
-                                        <h3 style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Days Running</h3>
-                                        <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: '900', color: '#38bdf8', margin: '0.5rem 0' }}>{dashboardData.daysCount}</div>
+                                        <h3 style={{ color: 'var(--text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Days Running</h3>
+                                        <div style={{ fontSize: 'clamp(1.8rem, 8vw, 2.5rem)', fontWeight: '900', color: '#38bdf8', margin: '0.5rem 0' }}>{dashboardData.daysCount}</div>
                                     </div>
                                     <div className="glass-card drilldown-action" style={{ padding: '1.5rem', textAlign: 'center', background: 'linear-gradient(145deg, rgba(236, 72, 153, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%)', border: activeCardDrilldown?.title === "Hair Care Users" ? '1px solid #ec4899' : '1px solid rgba(236, 72, 153, 0.2)', cursor: 'pointer' }} onClick={() => toggleCardDrilldown("Hair Care Users", "#ec4899", (r) => isAcceptedRow(r) && (r['AA'] || "").toString().toLowerCase().trim() === 'yes')}>
-                                        <h3 style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Hair Care Users</h3>
-                                        <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: '900', color: '#ec4899', margin: '0.5rem 0' }}>{dashboardData.haircareUsers}</div>
+                                        <h3 style={{ color: 'var(--text-muted)', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Hair Care Users</h3>
+                                        <div style={{ fontSize: 'clamp(1.8rem, 8vw, 2.5rem)', fontWeight: '900', color: '#ec4899', margin: '0.5rem 0' }}>{dashboardData.haircareUsers}</div>
                                     </div>
 
                                     {/* Drilldown for Row 1 */}
@@ -1507,10 +1509,20 @@ const PanelDashboard = ({ onDataUpdate }) => {
                             </div>
 
                             {/* Interviewer Performance Section */}
-                            <div id="performance-scorecard-section" className="glass-card" style={{ padding: '2.5rem', background: 'rgba(15, 23, 42, 0.3)' }}>
+                            <div id="performance-scorecard-section" className="glass-card" style={{ padding: 'clamp(1rem, 5vw, 2.5rem)', background: 'rgba(15, 23, 42, 0.3)' }}>
+                                <style>{`
+                                    @media (max-width: 768px) {
+                                        #performance-scorecard-section th, #performance-scorecard-section td {
+                                            padding: 0.8rem 0.5rem !important;
+                                            font-size: 0.65rem !important;
+                                        }
+                                        .kpi-label { font-size: 0.6rem !important; }
+                                        .kpi-value { font-size: 1.5rem !important; }
+                                    }
+                                `}</style>
                                 <h3 style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1rem', fontWeight: '800', letterSpacing: '0.1em' }}>
-                                    <span>INDIVIDUAL PERFORMANCE SCORECARD</span>
-                                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>* Click 'Accepted' counts to view specific records</span>
+                                    <span className="mobile-text-center mobile-full-width">INDIVIDUAL PERFORMANCE SCORECARD</span>
+                                    <span className="mobile-hide" style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>* Click 'Accepted' counts to view specific records</span>
                                 </h3>
                                 <div style={{ overflowX: 'auto' }}>
                                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
