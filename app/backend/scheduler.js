@@ -38,14 +38,21 @@ const runReport = async (providedUsers = null) => {
       integrityScore: 100
   };
 
-  const STATE_FILE = path.join(__dirname, "last_dashboard_state.json");
+  const STATE_FILE = path.resolve(__dirname, "last_dashboard_state.json");
+  console.log(`[Report Debug] Looking for state file at: ${STATE_FILE}`);
+
   if (fs.existsSync(STATE_FILE)) {
       try {
-          const stateData = JSON.parse(fs.readFileSync(STATE_FILE, "utf8"));
+          const raw = fs.readFileSync(STATE_FILE, "utf8");
+          const stateData = JSON.parse(raw);
           const dbData = stateData.dashboardData;
+          
           if (dbData) {
-              const integ = dbData.acceptedEntries > 0 
-                  ? Math.max(0, Math.round(((dbData.acceptedEntries - dbData.teamTotalIntegrityErrors) / dbData.acceptedEntries) * 100))
+              console.log(`[Report Debug] Successfully loaded dashboard data. Entries: ${dbData.totalEntries}`);
+              
+              // Fallback for integrity score calculation
+              const calculatedInteg = dbData.acceptedEntries > 0 
+                  ? Math.max(0, Math.round(((dbData.acceptedEntries - (dbData.teamTotalIntegrityErrors || 0)) / dbData.acceptedEntries) * 100))
                   : 100;
 
               metrics = {
@@ -53,12 +60,16 @@ const runReport = async (providedUsers = null) => {
                   acceptedRecords: dbData.acceptedEntries || 0,
                   qualityScore: dbData.teamAvgQual || 0,
                   productivityScore: dbData.teamAvgProd || 0,
-                  integrityScore: dbData.integrityScore || 0
+                  integrityScore: dbData.integrityScore !== undefined ? dbData.integrityScore : calculatedInteg
               };
+          } else {
+              console.warn("[Report Debug] dashboardData missing in state file.");
           }
       } catch (e) {
-          console.error("Failed to parse last_dashboard_state.json:", e);
+          console.error("[Report Debug] Failed to parse last_dashboard_state.json:", e);
       }
+  } else {
+      console.warn("[Report Debug] No last_dashboard_state.json found. Using zero metrics.");
   }
 
   // 3. Dispatch Reports (Email & Slack)
